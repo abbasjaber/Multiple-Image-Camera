@@ -27,6 +27,16 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scaleAnimation;
 
+  Future<void> toggleFlashlight() async {
+    if (_controller!.value.isInitialized) {
+      if (_controller!.value.flashMode == FlashMode.off) {
+        await _controller!.setFlashMode(FlashMode.torch);
+      } else {
+        await _controller!.setFlashMode(FlashMode.off);
+      }
+    }
+  }
+
   addImages(XFile image) {
     setState(() {
       imageFiles.add(image);
@@ -47,25 +57,24 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   }
 
   Widget? _animatedButton({Widget? customContent}) {
-    return customContent != null
-        ? customContent
-        : Container(
-            height: 70,
-            width: 150,
-            decoration: BoxDecoration(
-              color: Colors.white38,
-              borderRadius: BorderRadius.circular(100.0),
+    return customContent ??
+        Container(
+          height: 70,
+          width: 150,
+          decoration: BoxDecoration(
+            color: Colors.white38,
+            borderRadius: BorderRadius.circular(100.0),
+          ),
+          child: const Center(
+            child: Text(
+              'Done',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
-            child: const Center(
-              child: Text(
-                'Done',
-                style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
-          );
+          ),
+        );
   }
 
   Future<void> _initCamera() async {
@@ -146,17 +155,16 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                                             top: 0,
                                             right: 0,
                                             child: GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  removeImage();
-                                                });
-                                              },
-                                              child: Image.network(
-                                                "https://logowik.com/content/uploads/images/close1437.jpg",
-                                                height: 30,
-                                                width: 30,
-                                              ),
-                                            ),
+                                                onTap: () {
+                                                  setState(() {
+                                                    removeImage();
+                                                  });
+                                                },
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  size: 30,
+                                                  color: Colors.black,
+                                                )),
                                           )
                                         ],
                                       ),
@@ -354,12 +362,18 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: _animatedButton(customContent: widget.customButton),
                   ))
-              : const SizedBox()
+              : const SizedBox(),
+          IconButton(
+            icon: Icon(_controller!.value.flashMode == FlashMode.off
+                ? Icons.flash_on
+                : Icons.flash_off),
+            onPressed: toggleFlashlight,
+          ),
         ],
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       extendBody: true,
       body: _buildCameraPreview(),
     );
