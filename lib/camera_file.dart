@@ -26,15 +26,21 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late AnimationController controller;
   late Animation<double> scaleAnimation;
+  bool? flash = false;
 
   Future<void> toggleFlashlight() async {
     if (_controller!.value.isInitialized) {
       if (_controller!.value.flashMode == FlashMode.off) {
         await _controller!.setFlashMode(FlashMode.torch);
+        setState(() {
+          flash = true;
+        });
       } else {
         await _controller!.setFlashMode(FlashMode.off);
+        setState(() {
+          flash = false;
+        });
       }
-      setState(() {});
     }
   }
 
@@ -366,9 +372,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
               : const SizedBox(),
           IconButton(
             icon: Icon(
-              _controller!.value.flashMode == FlashMode.off
-                  ? Icons.flash_off
-                  : Icons.flash_on,
+              flash! ? Icons.flash_on : Icons.flash_off,
               color: Colors.white,
             ),
             onPressed: toggleFlashlight,
