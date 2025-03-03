@@ -34,6 +34,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
       } else {
         await _controller!.setFlashMode(FlashMode.off);
       }
+      setState(() {});
     }
   }
 
@@ -163,7 +164,7 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                                                 child: const Icon(
                                                   Icons.close,
                                                   size: 30,
-                                                  color: Colors.black,
+                                                  color: Colors.white,
                                                 )),
                                           )
                                         ],
@@ -364,9 +365,12 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
                   ))
               : const SizedBox(),
           IconButton(
-            icon: Icon(_controller!.value.flashMode == FlashMode.off
-                ? Icons.flash_on
-                : Icons.flash_off),
+            icon: Icon(
+              _controller!.value.flashMode == FlashMode.off
+                  ? Icons.flash_on
+                  : Icons.flash_off,
+              color: Colors.white,
+            ),
             onPressed: toggleFlashlight,
           ),
         ],
