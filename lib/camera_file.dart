@@ -367,8 +367,8 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
           IconButton(
             icon: Icon(
               _controller!.value.flashMode == FlashMode.off
-                  ? Icons.flash_on
-                  : Icons.flash_off,
+                  ? Icons.flash_off
+                  : Icons.flash_on,
               color: Colors.white,
             ),
             onPressed: toggleFlashlight,
