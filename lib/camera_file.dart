@@ -29,7 +29,8 @@ class _CameraFileState extends State<CameraFile> with TickerProviderStateMixin {
   bool? flash = false;
 
   Future<void> toggleFlashlight() async {
-    if (_controller!.value.flashMode == FlashMode.off) {
+    if (_controller!.value.flashMode == FlashMode.off ||
+        _controller!.value.flashMode == FlashMode.auto) {
       await _controller!.setFlashMode(FlashMode.torch);
       setState(() {
         flash = true;
